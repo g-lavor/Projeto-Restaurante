@@ -20,40 +20,48 @@ def realizar_pesquisa_com_usuario():
     restaurantes = carregar_dados_csv('restaurants.csv', 'cuisines.csv')
     pesquisa = PesquisaRestaurante(restaurantes)
     print('Como deseja realizar a pesquisa?\n1 - Nome\n2 - Culinaria\n3 - Distancia\n4 - Classificação\n5 - Preço')
+    
+    # Pede as escolhas do usuário
     escolhas = input('Digite os números das opções desejadas, separados por vírgula (ex: 1,3,5): ')
-    escolhas = [int(e) for e in escolhas.split(',') if e.isdigit() and 1 <= int(e) <= 5]
-    resultados_intermediarios = []
 
-    for escolha in escolhas:
-        if escolha == 1:
-            nome = input('Qual o nome do restaurante? ')
-            resultados_intermediarios.append(NomeRequisitos(nome))
-        elif escolha == 2:
-            culinaria = input('Qual o tipo de culinária? ')
-            resultados_intermediarios.append(CulinariaRequisitos(culinaria))
-        elif escolha == 3:
-            distancia = int(input('Qual a distância máxima (em km)? '))
-            resultados_intermediarios.append(DistanciaRequisitos(distancia))
-        elif escolha == 4:
-            classificacao = int(input('Qual a classificação mínima (de 1 a 5)? '))
-            resultados_intermediarios.append(ClassificacaoRequisitos(classificacao))
-        elif escolha == 5:
-            preco = float(input('Qual o preço máximo (em reais)? '))
-            resultados_intermediarios.append(PrecoRequisitos(preco))
-    resultado_pesquisa = pesquisa.realizar_pesquisa(*resultados_intermediarios)
+    # Converte as escolhas para inteiros
+    escolhas_int = [int(e) for e in escolhas.split(',') if e.isdigit()]
 
-    if resultado_pesquisa:
-        print("Resultados da Pesquisa:\n")
-        for restaurante in resultado_pesquisa:
-            print(
-                'Nome:', restaurante.nome, '\nDistância:', restaurante.distancia,
-                '\nClassificação:', restaurante.classificacao, '\nPreço:', restaurante.preco,
-                '\nCulinaria:', restaurante.culinaria
-            )
-            print()
-            print()
+    # Verifica se as escolhas estão no intervalo válido
+    if all(1 <= escolha <= 5 for escolha in escolhas_int):
+        resultados_intermediarios = []
+        for escolha in escolhas_int:
+            if escolha == 1:
+                nome = input('Qual o nome do restaurante? ')
+                resultados_intermediarios.append(NomeRequisitos(nome))
+            elif escolha == 2:
+                culinaria = input('Qual o tipo de culinária? ')
+                resultados_intermediarios.append(CulinariaRequisitos(culinaria))
+            elif escolha == 3:
+                distancia = int(input('Qual a distância máxima (em km)? '))
+                resultados_intermediarios.append(DistanciaRequisitos(distancia))
+            elif escolha == 4:
+                classificacao = int(input('Qual a classificação mínima (de 1 a 5)? '))
+                resultados_intermediarios.append(ClassificacaoRequisitos(classificacao))
+            elif escolha == 5:
+                preco = float(input('Qual o preço máximo (em reais)? '))
+                resultados_intermediarios.append(PrecoRequisitos(preco))
+        resultado_pesquisa = pesquisa.realizar_pesquisa(*resultados_intermediarios)
+
+        if resultado_pesquisa:
+            print("Resultados da Pesquisa:\n")
+            for restaurante in resultado_pesquisa:
+                print(
+                    'Nome:', restaurante.nome, '\nDistância:', restaurante.distancia,
+                    '\nClassificação:', restaurante.classificacao, '\nPreço:', restaurante.preco,
+                    '\nCulinaria:', restaurante.culinaria
+                )
+                print()
+                print()
+        else:
+            print("Sem restaurantes disponíveis")
     else:
-        print("Sem restaurantes disponíveis")
+        print("Entrada inválida. Escolha apenas números de 1 a 5.")
 
 if __name__ == "__main__":
     realizar_pesquisa_com_usuario()
